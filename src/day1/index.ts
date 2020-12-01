@@ -1,6 +1,6 @@
-const fs = require("fs");
-const assert = require("assert").strict;
-const path = require("path");
+import fs from "fs";
+import assert from "assert";
+import path from "path";
 
 function fixExpenseReport(expenses: number[]): number {
   for (let i = 0; i < expenses.length; i++) {
@@ -20,7 +20,7 @@ assert.strictEqual(
 );
 
 fs.readFile(
-  path.join(__dirname, "..", "src", "input"),
+  path.join(__dirname, "..", "..", "src", "day1", "input"),
   "utf8",
   function (err: NodeJS.ErrnoException, data: string) {
     if (err) throw err;
