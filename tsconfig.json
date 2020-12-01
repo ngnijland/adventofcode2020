@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
+    "target": "es2017",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
