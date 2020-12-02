@@ -2,40 +2,84 @@ import fs from "fs";
 import assert from "assert";
 import path from "path";
 
-function countValidPasswords(passwords: string[]): number {
-  const validPasswords = passwords.filter((passwordRules) => {
-    const [positionsRaw, characterRaw, password] = passwordRules.split(" ");
-
-    const positions = positionsRaw.split("-").map((x) => parseInt(x, 10));
-    const character = characterRaw.charAt(0);
-
-    const firstCharacter = password[positions[0] - 1] === character;
-    const secondCharacter = password[positions[1] - 1] === character;
-
-    if (!firstCharacter && !secondCharacter) {
-      return false;
-    }
-
-    if (firstCharacter && secondCharacter) {
-      return false;
-    }
-
-    if (
-      (firstCharacter && !secondCharacter) ||
-      (!firstCharacter && secondCharacter)
-    ) {
-      return true;
-    }
-
-    return false;
-  });
-
-  return validPasswords.length;
+interface ParsedLine {
+  positionOne: number;
+  positionTwo: number;
+  character: string;
+  password: string;
 }
 
+function parseLine(line: string): ParsedLine {
+  const [positionsRaw, [character], password] = line.split(" ");
+  const positions = positionsRaw.split("-").map((x) => parseInt(x, 10));
+
+  return {
+    positionOne: positions[0],
+    positionTwo: positions[1],
+    character,
+    password,
+  };
+}
+
+function isValidPassword({
+  positionOne,
+  positionTwo,
+  character,
+  password,
+}: ParsedLine): boolean {
+  const firstCharacter = password[positionOne - 1] === character;
+  const secondCharacter = password[positionTwo - 1] === character;
+
+  return (
+    (firstCharacter && !secondCharacter) || (!firstCharacter && secondCharacter)
+  );
+}
+
+assert.deepStrictEqual(parseLine("1-3 a: abcde"), {
+  positionOne: 1,
+  positionTwo: 3,
+  character: "a",
+  password: "abcde",
+});
+assert.deepStrictEqual(parseLine("1-3 b: cdefg"), {
+  positionOne: 1,
+  positionTwo: 3,
+  character: "b",
+  password: "cdefg",
+});
+assert.deepStrictEqual(parseLine("2-9 c: ccccccccc"), {
+  positionOne: 2,
+  positionTwo: 9,
+  character: "c",
+  password: "ccccccccc",
+});
+
 assert.strictEqual(
-  countValidPasswords(["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]),
-  1
+  isValidPassword({
+    positionOne: 1,
+    positionTwo: 3,
+    character: "a",
+    password: "abcde",
+  }),
+  true
+);
+assert.strictEqual(
+  isValidPassword({
+    positionOne: 1,
+    positionTwo: 3,
+    character: "b",
+    password: "cdefg",
+  }),
+  false
+);
+assert.strictEqual(
+  isValidPassword({
+    positionOne: 2,
+    positionTwo: 9,
+    character: "c",
+    password: "ccccccccc",
+  }),
+  false
 );
 
 fs.readFile(
@@ -44,8 +88,9 @@ fs.readFile(
   function (err: NodeJS.ErrnoException, data: string) {
     if (err) throw err;
 
-    const formattedData = data.split("\n");
-    formattedData.pop();
-    console.log(countValidPasswords(formattedData));
+    const input = data.trim().split("\n").map(parseLine);
+    const validPasswords = input.filter(isValidPassword);
+
+    console.log(validPasswords.length);
   }
 );
