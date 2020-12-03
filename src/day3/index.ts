@@ -14,10 +14,11 @@ function treesEncountered(
 
   while (y < end) {
     y = y + velocityDown;
-    x =
-      x + velocityRight > map[y].length - 1
-        ? x + velocityRight - map[y].length
-        : x + velocityRight;
+    x = x + velocityRight;
+
+    if (x > map[y].length - 1) {
+      x = x - map[y].length;
+    }
 
     if (map[y][x] === "#") {
       trees = trees + 1;
