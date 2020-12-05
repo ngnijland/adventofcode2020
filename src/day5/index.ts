@@ -52,12 +52,19 @@ fs.readFile(
     const input = data.trim().split("\n");
 
     console.log(
-      Math.max(
-        ...input.map((code) => {
+      input
+        .map((code) => {
           const [row, column] = decodeSeat(code);
           return row * 8 + column;
         })
-      )
+        .sort((a, b) => a - b)
+        .reduce((acc, id, index, source) => {
+          if (id + 1 === source[index + 1]) {
+            return acc;
+          }
+
+          return [...acc, id + 1];
+        }, [])
     );
   }
 );
