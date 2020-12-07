@@ -91,7 +91,7 @@ assert.deepStrictEqual(
 );
 
 fs.readFile(
-  path.join(__dirname, "..", "..", "src", "day7", "input"),
+  path.join(__dirname, "..", "..", "src", "day7_1", "input"),
   "utf8",
   function (err: NodeJS.ErrnoException, data: string) {
     if (err) throw err;
