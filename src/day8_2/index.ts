@@ -63,9 +63,11 @@ function bruteForceProgram(program: string[]): void {
         (instruction.includes("jmp") || instruction.includes("nop"))
     );
 
+    const operation = programCopy[index].includes("jmp") ? "jmp" : "nop";
+
     programCopy[index] = programCopy[index].replace(
-      programCopy[index].includes("jmp") ? "jmp" : "nop",
-      programCopy[index].includes("jmp") ? "nop" : "jmp"
+      operation === "jmp" ? "jmp" : "nop",
+      operation === "jmp" ? "nop" : "jmp"
     );
 
     const result = executeProgram(programCopy);
