@@ -37,9 +37,11 @@ function executeProgram(program: string[]): number | Error {
       throw new Error("Infinite loop");
     }
 
-    if (typeof program[index] === "string") {
-      innerFn(program[index]);
+    if (typeof program[index] === "undefined") {
+      throw new Error("Instruction does not exist");
     }
+
+    innerFn(program[index]);
   }
 
   try {
