@@ -38,7 +38,7 @@ function executeProgram(program: string[]): number | Error {
     }
 
     if (typeof program[index] === "undefined") {
-      throw new Error("Instruction does not exist");
+      return;
     }
 
     innerFn(program[index]);
