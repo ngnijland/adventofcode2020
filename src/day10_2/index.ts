@@ -9,7 +9,7 @@ function countPossibilities(joltageRatings: number[]): number {
   /*
    * I did not find this solution myself
    *
-   * Amazing explanation here:
+   * I watched this video and then build my own implementation:
    * https://www.youtube.com/watch?v=_f8N7qo_5hA
    */
   function innerFn(
